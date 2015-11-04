@@ -1,5 +1,6 @@
 package com.stewhouse.updownseekbar;
 
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,39 +10,26 @@ import android.widget.SeekBar;
 
 public class UDMainActivity extends AppCompatActivity {
 
+    private UpDownSeekBar _upDownSeekBar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
 
-        SeekBar defaultSeekBar;
+        _upDownSeekBar = (UpDownSeekBar) findViewById(R.id.seekBar);
+        _upDownSeekBar.setMaxProgress(100);
+        _upDownSeekBar.setMinProgress(0);
+        _upDownSeekBar.setIndicatorBGColor(Color.BLUE);
+    }
 
-        defaultSeekBar = (SeekBar) findViewById(R.id.defalutSeekBar);
-        if (defaultSeekBar != null) {
-            defaultSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
 
-                @Override
-                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-
-                    // Get progress.
-                    Log.e("onProgressChanged", "PROGRESS: " + progress);
-                }
-
-                @Override
-                public void onStartTrackingTouch(SeekBar seekBar) {
-
-                    // 선택 막대를 터치하고 드래그를 시작할 때 실행되는 메서드.
-                    Log.e("onStartTrackingTouch", "DRAGGING");
-                }
-
-                @Override
-                public void onStopTrackingTouch(SeekBar seekBar) {
-
-                    // 선택을 완료했을 때 표시하는 메서드.
-                    Log.e("onStopTrackingTouch", "DRAGGING COMPLETE");
-                }
-            });
+        if (_upDownSeekBar != null) {
+            _upDownSeekBar.setProgress(50);
         }
     }
 

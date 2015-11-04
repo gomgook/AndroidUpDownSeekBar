@@ -1,64 +1,83 @@
 package com.stewhouse.updownseekbar;
 
 import android.content.Context;
-import android.graphics.Canvas;
 import android.util.AttributeSet;
-import android.view.MotionEvent;
-import android.widget.SeekBar;
+import android.util.Log;
+import android.widget.RelativeLayout;
 
 /**
  * Created by Allwin-Eva on 15. 10. 16..
  */
 
-// REFERENCE: https://github.com/AndroSelva/Vertical-SeekBar-Android
+public class UpDownSeekBar extends RelativeLayout {
 
-public class UpDownSeekBar extends SeekBar {
+    private int _maxProgress;
+    private int _minProgress;
+    private int _progress;
+
+    private RelativeLayout _indicatorBGView;
+    private int _indicatorBGColor;
+    private LayoutParams _indicatorBGParams;
+
+    private RelativeLayout _indicatorView;
 
     public UpDownSeekBar(Context context) {
         super(context);
+
+        initialize();
     }
 
     public UpDownSeekBar(Context context, AttributeSet attrs) {
         super(context, attrs);
+
+        initialize();
     }
 
     public UpDownSeekBar(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+
+        initialize();
     }
 
-    @Override
-    protected synchronized void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(heightMeasureSpec, widthMeasureSpec);
+    public void initialize() {
+        _maxProgress = -1;
+        _minProgress = -1;
+        _progress = -1;
 
-        setMeasuredDimension(getMeasuredHeight(), getMeasuredWidth());
+        _indicatorBGView = null;
+        _indicatorBGColor = -1;
+        _indicatorBGParams = null;
+
+        _indicatorView = null;
     }
 
-    protected void onDraw(Canvas c) {
-        c.rotate(-90);
-        c.translate(-getHeight(), 0);
-
-        super.onDraw(c);
+    public void setMaxProgress(int maxProgress) {
+        _maxProgress = maxProgress;
     }
 
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        if (!isEnabled()) {
-            return false;
+    public void setMinProgress(int minProgress) {
+        _minProgress = minProgress;
+    }
+
+    public void setIndicatorBGColor(int indicatorBGColor) {
+        _indicatorBGColor = indicatorBGColor;
+    }
+
+    public void setProgress(int progress) {
+        if (_indicatorBGView == null) {
+            _indicatorBGView = new RelativeLayout(getContext());
+            addView(_indicatorBGView);
+        }
+        if (_indicatorBGParams == null) {
+            _indicatorBGParams = new LayoutParams(getMeasuredWidth(), LayoutParams.MATCH_PARENT);
+            _indicatorBGParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
         }
 
-        switch (event.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-            case MotionEvent.ACTION_MOVE:
-            case MotionEvent.ACTION_UP:
-                int i = 0;
-                i = getMax() - (int) (getMax() * event.getY() / getHeight());
-                setProgress(i);
-                onSizeChanged(getWidth(), getHeight(), 0, 0);
-                break;
+        int progressCalculate = (int) (getMeasuredHeight() * (float)(progress / (float)(_maxProgress - _minProgress)));
+        _indicatorBGParams.setMargins(0, getMeasuredHeight() - progressCalculate, 0, 0);
+        _indicatorBGView.setBackgroundColor(_indicatorBGColor);
+        _indicatorBGView.setLayoutParams(_indicatorBGParams);
 
-            case MotionEvent.ACTION_CANCEL:
-                break;
-        }
-        return true;
+        invalidate();
     }
 }
