@@ -2,7 +2,6 @@ package com.stewhouse.updownseekbar;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.widget.RelativeLayout;
 
 /**
@@ -13,13 +12,10 @@ public class UpDownSeekBar extends RelativeLayout {
 
     private int _maxProgress;
     private int _minProgress;
-    private int _progress;
 
     private RelativeLayout _indicatorBGView;
     private int _indicatorBGColor;
     private LayoutParams _indicatorBGParams;
-
-    private RelativeLayout _indicatorView;
 
     public UpDownSeekBar(Context context) {
         super(context);
@@ -42,13 +38,10 @@ public class UpDownSeekBar extends RelativeLayout {
     public void initialize() {
         _maxProgress = -1;
         _minProgress = -1;
-        _progress = -1;
 
         _indicatorBGView = null;
         _indicatorBGColor = -1;
         _indicatorBGParams = null;
-
-        _indicatorView = null;
     }
 
     public void setMaxProgress(int maxProgress) {
