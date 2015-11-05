@@ -27,6 +27,7 @@ public class UDMainActivity extends AppCompatActivity {
         _upDownSeekBar.setMinIndicatorViewHeight(60);
         _upDownSeekBar.setMaxIndicatorViewWidth(60);
         _upDownSeekBar.setMaxIndicatorViewHeight(60);
+        _upDownSeekBar.setSeekBarViewWidth(20);
     }
 
     @Override
