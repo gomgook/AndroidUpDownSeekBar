@@ -19,18 +19,19 @@ public class UDMainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         _upDownSeekBar = (UpDownSeekBar) findViewById(R.id.seekBar);
-        _upDownSeekBar.setMaxProgress(100);
-        _upDownSeekBar.setMinProgress(0);
-        _upDownSeekBar.setIndicatorBGColor(Color.BLUE);
+        _upDownSeekBar.setIndicatorViewWidth(80);
+        _upDownSeekBar.setIndicatorViewHeight(80);
+        _upDownSeekBar.setIndicatorDetailViewWidth(300);
+        _upDownSeekBar.setIndicatorDetailViewHeight(300);
+        _upDownSeekBar.setMinIndicatorViewWidth(60);
+        _upDownSeekBar.setMinIndicatorViewHeight(60);
     }
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
 
-        if (_upDownSeekBar != null) {
-            _upDownSeekBar.setProgress(50);
-        }
+        _upDownSeekBar.setProgress(10);
     }
 
     @Override

@@ -7,10 +7,11 @@
 
     <com.stewhouse.updownseekbar.UpDownSeekBar
         android:id="@+id/seekBar"
-        android:layout_width="10dp"
+        android:layout_width="150dp"
         android:background="@android:color/black"
         android:layout_height="match_parent"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true" />
+
 </RelativeLayout>
