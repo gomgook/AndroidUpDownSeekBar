@@ -12,19 +12,22 @@ import android.widget.RelativeLayout;
 
 public class UpDownSeekBar extends RelativeLayout {
 
+    private int _maxProgress;
+    private int _minProgress;
+
     private RelativeLayout _seekBarView;
     private LayoutParams _seekBarViewParams;
     private int _seekBarViewWidth;
-
-    private RelativeLayout _minIndicatorView;
-    private LayoutParams _minIndicatorViewParams;
-    private int _minIndicatorViewWidth;
-    private int _minIndicatorViewHeight;
 
     private RelativeLayout _maxIndicatorView;
     private LayoutParams _maxIndicatorViewParams;
     private int _maxIndicatorViewWidth;
     private int _maxIndicatorViewHeight;
+
+    private RelativeLayout _minIndicatorView;
+    private LayoutParams _minIndicatorViewParams;
+    private int _minIndicatorViewWidth;
+    private int _minIndicatorViewHeight;
 
     private RelativeLayout _indicatorViewGroup;
     private LayoutParams _indicatorViewGroupParams;
@@ -61,19 +64,22 @@ public class UpDownSeekBar extends RelativeLayout {
     }
 
     private void initialize() {
+        _maxProgress = -1;
+        _minProgress = -1;
+
         _seekBarView = null;
         _seekBarViewParams = null;
         _seekBarViewWidth = -1;
-
-        _minIndicatorView = null;
-        _minIndicatorViewParams = null;
-        _minIndicatorViewWidth = -1;
-        _minIndicatorViewHeight = -1;
 
         _maxIndicatorView = null;
         _maxIndicatorViewParams = null;
         _maxIndicatorViewWidth = -1;
         _maxIndicatorViewHeight = -1;
+
+        _minIndicatorView = null;
+        _minIndicatorViewParams = null;
+        _minIndicatorViewWidth = -1;
+        _minIndicatorViewHeight = -1;
 
         _indicatorViewGroup = null;
         _indicatorViewGroupParams = null;
@@ -92,16 +98,16 @@ public class UpDownSeekBar extends RelativeLayout {
         _indicatorBGViewParams = null;
     }
 
+    public void setMaxProgress(int maxProgress) {
+        _maxProgress = maxProgress;
+    }
+
+    public void setMinProgress(int minProgress) {
+        _minProgress = minProgress;
+    }
+
     public void setSeekBarViewWidth(int seekBarViewWidth) {
         _seekBarViewWidth = seekBarViewWidth;
-    }
-
-    public void setMinIndicatorViewWidth(int minIndicatorViewWidth) {
-        _minIndicatorViewWidth = minIndicatorViewWidth;
-    }
-
-    public void setMinIndicatorViewHeight(int minIndicatorViewHeight) {
-        _minIndicatorViewHeight = minIndicatorViewHeight;
     }
 
     public void setMaxIndicatorViewWidth(int maxIndicatorViewWidth) {
@@ -110,6 +116,14 @@ public class UpDownSeekBar extends RelativeLayout {
 
     public void setMaxIndicatorViewHeight(int maxIndicatorViewHeight) {
         _maxIndicatorViewHeight = maxIndicatorViewHeight;
+    }
+
+    public void setMinIndicatorViewWidth(int minIndicatorViewWidth) {
+        _minIndicatorViewWidth = minIndicatorViewWidth;
+    }
+
+    public void setMinIndicatorViewHeight(int minIndicatorViewHeight) {
+        _minIndicatorViewHeight = minIndicatorViewHeight;
     }
 
     public void setIndicatorViewWidth(int indicatorViewWidth) {
@@ -134,20 +148,10 @@ public class UpDownSeekBar extends RelativeLayout {
             addView(_seekBarView);
         }
         if (_seekBarViewParams == null) {
-            _seekBarViewParams = new LayoutParams(_seekBarViewWidth, getMeasuredHeight() - ((_indicatorDetailViewHeight / 2) - (_minIndicatorViewHeight / 2)) - ((_indicatorDetailViewHeight / 2) - (_maxIndicatorViewHeight / 2)) - (_minIndicatorViewHeight / 2) - (_maxIndicatorViewHeight / 2));
+            _seekBarViewParams = new LayoutParams(_seekBarViewWidth, getMeasuredHeight() - ((_indicatorDetailViewHeight / 2) - (_maxIndicatorViewHeight / 2)) - ((_indicatorDetailViewHeight / 2) - (_minIndicatorViewHeight / 2)) - (_maxIndicatorViewHeight / 2) - (_minIndicatorViewHeight / 2));
             _seekBarViewParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
             _seekBarViewParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
             _seekBarViewParams.setMargins(0, (_indicatorDetailViewHeight / 2), _indicatorDetailViewWidth + (_indicatorViewWidth / 2) - (_seekBarViewWidth / 2), 0);
-        }
-        if (_minIndicatorView == null) {
-            _minIndicatorView = new RelativeLayout(getContext());
-            addView(_minIndicatorView);
-        }
-        if (_minIndicatorViewParams == null) {
-            _minIndicatorViewParams = new LayoutParams(_minIndicatorViewWidth, _minIndicatorViewHeight);
-            _minIndicatorViewParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, RelativeLayout.TRUE);
-            _minIndicatorViewParams.addRule(RelativeLayout.ALIGN_PARENT_TOP, RelativeLayout.TRUE);
-            _minIndicatorViewParams.setMargins(0, (_indicatorDetailViewHeight / 2) - (_minIndicatorViewHeight / 2), _indicatorDetailViewWidth + ((_indicatorViewWidth - _minIndicatorViewWidth) / 2), 0);
         }
         if (_maxIndicatorView == null) {
             _maxIndicatorView = new RelativeLayout(getContext());
@@ -156,8 +160,18 @@ public class UpDownSeekBar extends RelativeLayout {
         if (_maxIndicatorViewParams == null) {
             _maxIndicatorViewParams = new LayoutParams(_maxIndicatorViewWidth, _maxIndicatorViewHeight);
             _maxIndicatorViewParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, RelativeLayout.TRUE);
-            _maxIndicatorViewParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
-            _maxIndicatorViewParams.setMargins(0, 0, _indicatorDetailViewWidth + ((_indicatorViewWidth - _maxIndicatorViewWidth) / 2), (_indicatorDetailViewHeight / 2) - (_maxIndicatorViewHeight / 2));
+            _maxIndicatorViewParams.addRule(RelativeLayout.ALIGN_PARENT_TOP, RelativeLayout.TRUE);
+            _maxIndicatorViewParams.setMargins(0, (_indicatorDetailViewHeight / 2) - (_maxIndicatorViewHeight / 2), _indicatorDetailViewWidth + ((_indicatorViewWidth - _maxIndicatorViewWidth) / 2), 0);
+        }
+        if (_minIndicatorView == null) {
+            _minIndicatorView = new RelativeLayout(getContext());
+            addView(_minIndicatorView);
+        }
+        if (_minIndicatorViewParams == null) {
+            _minIndicatorViewParams = new LayoutParams(_minIndicatorViewWidth, _minIndicatorViewHeight);
+            _minIndicatorViewParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, RelativeLayout.TRUE);
+            _minIndicatorViewParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
+            _minIndicatorViewParams.setMargins(0, 0, _indicatorDetailViewWidth + ((_indicatorViewWidth - _minIndicatorViewWidth) / 2), (_indicatorDetailViewHeight / 2) - (_minIndicatorViewHeight / 2));
         }
         if (_indicatorViewGroup == null) {
             _indicatorViewGroup = new RelativeLayout(getContext());
@@ -166,7 +180,6 @@ public class UpDownSeekBar extends RelativeLayout {
         if (_indicatorViewGroupParams == null) {
             _indicatorViewGroupParams = new LayoutParams(_indicatorViewWidth + _indicatorDetailViewWidth, ViewGroup.LayoutParams.MATCH_PARENT);
             _indicatorViewGroupParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, RelativeLayout.TRUE);
-            _indicatorViewGroupParams.setMargins(0, 10, 0, 0);
         }
         if (_indicatorDetailView == null) {
             _indicatorDetailView = new RelativeLayout(getContext());
@@ -200,12 +213,16 @@ public class UpDownSeekBar extends RelativeLayout {
             _indicatorBGViewParams.setMargins((_indicatorViewWidth / 2) - (_seekBarViewWidth / 2), 0, 0, 0);
         }
 
+        int progressCalculate = (int) ((getMeasuredHeight() - _indicatorDetailViewHeight) * (float)(progress / (float)(_maxProgress - _minProgress)));
+        int h = getMeasuredHeight();
+        _indicatorViewGroupParams.setMargins(0, (getMeasuredHeight() - _indicatorDetailViewHeight) - progressCalculate, 0, 0);
+
         _seekBarView.setLayoutParams(_seekBarViewParams);
         _seekBarView.setBackgroundColor(Color.MAGENTA);
-        _minIndicatorView.setBackgroundColor(Color.GREEN);
-        _minIndicatorView.setLayoutParams(_minIndicatorViewParams);
         _maxIndicatorView.setBackgroundColor(Color.GREEN);
         _maxIndicatorView.setLayoutParams(_maxIndicatorViewParams);
+        _minIndicatorView.setBackgroundColor(Color.WHITE);
+        _minIndicatorView.setLayoutParams(_minIndicatorViewParams);
         _indicatorViewGroup.setLayoutParams(_indicatorViewGroupParams);
         _indicatorDetailView.setBackgroundColor(Color.BLUE);
         _indicatorDetailView.setLayoutParams(_indicatorDetailViewParams);

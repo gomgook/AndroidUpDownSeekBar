@@ -1,14 +1,13 @@
 package com.stewhouse.updownseekbar;
 
-import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.SeekBar;
+import android.view.View;
+import android.widget.Button;
 
-public class UDMainActivity extends AppCompatActivity {
+public class UDMainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private UpDownSeekBar _upDownSeekBar;
 
@@ -18,23 +17,37 @@ public class UDMainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
 
-        _upDownSeekBar = (UpDownSeekBar) findViewById(R.id.seekBar);
-        _upDownSeekBar.setIndicatorViewWidth(80);
-        _upDownSeekBar.setIndicatorViewHeight(80);
-        _upDownSeekBar.setIndicatorDetailViewWidth(300);
-        _upDownSeekBar.setIndicatorDetailViewHeight(300);
-        _upDownSeekBar.setMinIndicatorViewWidth(60);
-        _upDownSeekBar.setMinIndicatorViewHeight(60);
-        _upDownSeekBar.setMaxIndicatorViewWidth(60);
-        _upDownSeekBar.setMaxIndicatorViewHeight(60);
-        _upDownSeekBar.setSeekBarViewWidth(20);
+        Button btn1 = (Button) findViewById(R.id.button);
+        btn1.setOnClickListener(this);
+        Button btn2 = (Button) findViewById(R.id.button2);
+        btn2.setOnClickListener(this);
+        Button btn3 = (Button) findViewById(R.id.button3);
+        btn3.setOnClickListener(this);
+        Button btn4 = (Button) findViewById(R.id.button4);
+        btn4.setOnClickListener(this);
+        Button btn5 = (Button) findViewById(R.id.button5);
+        btn5.setOnClickListener(this);
     }
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
 
-        _upDownSeekBar.setProgress(10);
+        _upDownSeekBar = (UpDownSeekBar) findViewById(R.id.seekBar);
+        if (_upDownSeekBar != null) {
+            _upDownSeekBar.setIndicatorViewWidth(80);
+            _upDownSeekBar.setIndicatorViewHeight(80);
+            _upDownSeekBar.setIndicatorDetailViewWidth(300);
+            _upDownSeekBar.setIndicatorDetailViewHeight(300);
+            _upDownSeekBar.setMaxIndicatorViewWidth(60);
+            _upDownSeekBar.setMaxIndicatorViewHeight(60);
+            _upDownSeekBar.setMinIndicatorViewWidth(60);
+            _upDownSeekBar.setMinIndicatorViewHeight(60);
+            _upDownSeekBar.setSeekBarViewWidth(20);
+            _upDownSeekBar.setMaxProgress(50000);
+            _upDownSeekBar.setMinProgress(10);
+            _upDownSeekBar.setProgress((30000 + 10) / 2);
+        }
     }
 
     @Override
@@ -53,5 +66,20 @@ public class UDMainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (v.getId() == R.id.button) {
+            _upDownSeekBar.setProgress(0);
+        } else if (v.getId() == R.id.button2) {
+            _upDownSeekBar.setProgress(300);
+        } else if (v.getId() == R.id.button3) {
+            _upDownSeekBar.setProgress(12000);
+        } else if (v.getId() == R.id.button4) {
+            _upDownSeekBar.setProgress(28000);
+        } else if (v.getId() == R.id.button5) {
+            _upDownSeekBar.setProgress(30000);
+        }
     }
 }
