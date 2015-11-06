@@ -1,8 +1,11 @@
 package com.stewhouse.updownseekbar;
 
+import android.content.ClipData;
+import android.content.ClipDescription;
 import android.content.Context;
 import android.graphics.Color;
 import android.util.AttributeSet;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
@@ -10,7 +13,9 @@ import android.widget.RelativeLayout;
  * Created by Allwin-Eva on 15. 10. 16..
  */
 
-public class UpDownSeekBar extends RelativeLayout {
+public class UpDownSeekBar extends RelativeLayout implements View.OnLongClickListener {
+
+    private static final String INDICATOR_VIEW_GROUP_TAG = "INDICATOR_VIEW_GROUP_TAG";
 
     private int _maxProgress;
     private int _minProgress;
@@ -42,8 +47,8 @@ public class UpDownSeekBar extends RelativeLayout {
     private int _indicatorDetailViewWidth;
     private int _indicatorDetailViewHeight;
 
-    private RelativeLayout _indicatorBGView;
-    private LayoutParams _indicatorBGViewParams;
+//    private RelativeLayout _indicatorBGView;
+//    private LayoutParams _indicatorBGViewParams;
 
     public UpDownSeekBar(Context context) {
         super(context);
@@ -94,8 +99,8 @@ public class UpDownSeekBar extends RelativeLayout {
         _indicatorDetailViewWidth = -1;
         _indicatorDetailViewHeight = -1;
 
-        _indicatorBGView = null;
-        _indicatorBGViewParams = null;
+//        _indicatorBGView = null;
+//        _indicatorBGViewParams = null;
     }
 
     public void setMaxProgress(int maxProgress) {
@@ -175,6 +180,8 @@ public class UpDownSeekBar extends RelativeLayout {
         }
         if (_indicatorViewGroup == null) {
             _indicatorViewGroup = new RelativeLayout(getContext());
+            _indicatorViewGroup.setTag(INDICATOR_VIEW_GROUP_TAG);
+            _indicatorViewGroup.setOnLongClickListener(this);
             addView(_indicatorViewGroup);
         }
         if (_indicatorViewGroupParams == null) {
@@ -202,16 +209,16 @@ public class UpDownSeekBar extends RelativeLayout {
             _indicatorViewParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
             _indicatorViewParams.setMargins(0, (_indicatorDetailViewHeight / 2) - (_indicatorViewHeight / 2), 0, 0);
         }
-        if (_indicatorBGView == null) {
-            _indicatorBGView = new RelativeLayout(getContext());
-            _indicatorViewGroup.addView(_indicatorBGView);
-        }
-        if (_indicatorBGViewParams == null) {
-            _indicatorBGViewParams = new LayoutParams(_seekBarViewWidth, getMeasuredHeight());
-            _indicatorBGViewParams.addRule(RelativeLayout.ALIGN_LEFT, _indicatorView.getId());
-            _indicatorBGViewParams.addRule(RelativeLayout.BELOW, _indicatorView.getId());
-            _indicatorBGViewParams.setMargins((_indicatorViewWidth / 2) - (_seekBarViewWidth / 2), 0, 0, 0);
-        }
+//        if (_indicatorBGView == null) {
+//            _indicatorBGView = new RelativeLayout(getContext());
+//            _indicatorViewGroup.addView(_indicatorBGView);
+//        }
+//        if (_indicatorBGViewParams == null) {
+//            _indicatorBGViewParams = new LayoutParams(_seekBarViewWidth, getMeasuredHeight());
+//            _indicatorBGViewParams.addRule(RelativeLayout.ALIGN_LEFT, _indicatorView.getId());
+//            _indicatorBGViewParams.addRule(RelativeLayout.BELOW, _indicatorView.getId());
+//            _indicatorBGViewParams.setMargins((_indicatorViewWidth / 2) - (_seekBarViewWidth / 2), 0, 0, 0);
+//        }
 
         int progressCalculate = (int) ((getMeasuredHeight() - _indicatorDetailViewHeight) * (float)(progress / (float)(_maxProgress - _minProgress)));
         int h = getMeasuredHeight();
@@ -228,9 +235,22 @@ public class UpDownSeekBar extends RelativeLayout {
         _indicatorDetailView.setLayoutParams(_indicatorDetailViewParams);
         _indicatorView.setBackgroundColor(Color.GRAY);
         _indicatorView.setLayoutParams(_indicatorViewParams);
-        _indicatorBGView.setBackgroundColor(Color.RED);
-        _indicatorBGView.setLayoutParams(_indicatorBGViewParams);
+//        _indicatorBGView.setBackgroundColor(Color.RED);
+//        _indicatorBGView.setLayoutParams(_indicatorBGViewParams);
 
         invalidate();
+    }
+
+    @Override
+    public boolean onLongClick(View v) {
+
+        // TODO: http://devbible.tistory.com/48 확인해볼 것.
+
+        ClipData.Item item = new ClipData.Item((CharSequence) v.getTag());
+        String[] mimeTypes = { ClipDescription.MIMETYPE_TEXT_PLAIN };
+        ClipData data = new ClipData(v.getTag().toString(), mimeTypes, item);
+        DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(v);
+        v.startDrag(data, shadowBuilder, v, 0);
+        return true;
     }
 }
