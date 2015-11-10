@@ -18,6 +18,7 @@ public class UpDownSeekBar extends RelativeLayout implements View.OnTouchListene
 
     private static final String INDICATOR_VIEW_GROUP_TAG = "INDICATOR_VIEW_GROUP_TAG";
 
+    private int _progress;
     private int _maxProgress;
     private int _minProgress;
 
@@ -67,6 +68,7 @@ public class UpDownSeekBar extends RelativeLayout implements View.OnTouchListene
     }
 
     private void initialize() {
+        _progress = -1;
         _maxProgress = -1;
         _minProgress = -1;
 
@@ -142,6 +144,10 @@ public class UpDownSeekBar extends RelativeLayout implements View.OnTouchListene
         _indicatorDetailViewHeight = indicatorDetailViewHeight;
     }
 
+    public int getProgress() {
+        return _progress;
+    }
+
     public void setProgress(int progress) {
         if (_seekBarView == null) {
             _seekBarView = new RelativeLayout(getContext());
@@ -210,6 +216,7 @@ public class UpDownSeekBar extends RelativeLayout implements View.OnTouchListene
         int progressCalculate = (int) ((getMeasuredHeight() - _indicatorDetailViewHeight) * (float)(progress / (float)(_maxProgress - _minProgress)));
         int h = getMeasuredHeight();
         _indicatorViewGroupParams.setMargins(0, (getMeasuredHeight() - _indicatorDetailViewHeight) - progressCalculate, 0, 0);
+        _progress = progressCalculate;
 
         _seekBarView.setLayoutParams(_seekBarViewParams);
         _seekBarView.setBackgroundColor(Color.MAGENTA);
@@ -237,6 +244,8 @@ public class UpDownSeekBar extends RelativeLayout implements View.OnTouchListene
                     if (marginTop < getMeasuredHeight() - _indicatorDetailViewHeight) {
                         _indicatorViewGroupParams.setMargins(0, marginTop, 0, 0);
                         _indicatorViewGroup.setLayoutParams(_indicatorViewGroupParams);
+                        float heightCalculate = (float)marginTop / (float)(getMeasuredHeight() - _indicatorDetailViewHeight);
+                        _progress = _maxProgress - (int) (heightCalculate * (_maxProgress - _minProgress));
                     }
                     break;
             }
