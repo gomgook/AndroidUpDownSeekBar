@@ -2,12 +2,13 @@ package com.stewhouse.updownseekbar;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
-public class UDMainActivity extends AppCompatActivity implements View.OnClickListener {
+public class UDMainActivity extends AppCompatActivity implements View.OnClickListener, UpDownSeekBarListener {
 
     private UpDownSeekBar _upDownSeekBar;
 
@@ -35,6 +36,7 @@ public class UDMainActivity extends AppCompatActivity implements View.OnClickLis
 
         _upDownSeekBar = (UpDownSeekBar) findViewById(R.id.seekBar);
         if (_upDownSeekBar != null) {
+            _upDownSeekBar.setListener(this);
             _upDownSeekBar.setIndicatorViewWidth(80);
             _upDownSeekBar.setIndicatorViewHeight(80);
             _upDownSeekBar.setIndicatorDetailViewWidth(300);
@@ -81,5 +83,10 @@ public class UDMainActivity extends AppCompatActivity implements View.OnClickLis
         } else if (v.getId() == R.id.button5) {
             _upDownSeekBar.setProgress(30000);
         }
+    }
+
+    @Override
+    public void progressChanged(int progress) {
+        Log.e("PROGRESS", "progress: " + progress);
     }
 }
