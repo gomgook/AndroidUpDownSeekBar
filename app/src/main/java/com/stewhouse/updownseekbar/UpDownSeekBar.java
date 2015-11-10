@@ -233,8 +233,11 @@ public class UpDownSeekBar extends RelativeLayout implements View.OnTouchListene
                 case MotionEvent.ACTION_MOVE:
                     DisplayMetrics display = getResources().getDisplayMetrics();
                     int displayHeight = display.heightPixels;
-                    _indicatorViewGroupParams.setMargins(0, (int) ((getMeasuredHeight() - (_indicatorDetailViewHeight / 2)) * event.getRawY() / displayHeight), 0, 0);
-                    _indicatorViewGroup.setLayoutParams(_indicatorViewGroupParams);
+                    int marginTop = (int) ((getMeasuredHeight() - (_indicatorDetailViewHeight / 2)) * event.getRawY() / displayHeight);
+                    if (marginTop < getMeasuredHeight() - _indicatorDetailViewHeight) {
+                        _indicatorViewGroupParams.setMargins(0, marginTop, 0, 0);
+                        _indicatorViewGroup.setLayoutParams(_indicatorViewGroupParams);
+                    }
                     break;
             }
         } else {
