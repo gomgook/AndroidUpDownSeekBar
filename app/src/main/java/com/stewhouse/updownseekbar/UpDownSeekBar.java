@@ -1,19 +1,20 @@
 package com.stewhouse.updownseekbar;
 
-import android.content.ClipData;
-import android.content.ClipDescription;
 import android.content.Context;
 import android.graphics.Color;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
+import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
+import android.widget.AbsoluteLayout;
 import android.widget.RelativeLayout;
 
 /**
  * Created by Allwin-Eva on 15. 10. 16..
  */
 
-public class UpDownSeekBar extends RelativeLayout implements View.OnLongClickListener {
+public class UpDownSeekBar extends RelativeLayout implements View.OnTouchListener {
 
     private static final String INDICATOR_VIEW_GROUP_TAG = "INDICATOR_VIEW_GROUP_TAG";
 
@@ -46,9 +47,6 @@ public class UpDownSeekBar extends RelativeLayout implements View.OnLongClickLis
     private LayoutParams _indicatorDetailViewParams;
     private int _indicatorDetailViewWidth;
     private int _indicatorDetailViewHeight;
-
-//    private RelativeLayout _indicatorBGView;
-//    private LayoutParams _indicatorBGViewParams;
 
     public UpDownSeekBar(Context context) {
         super(context);
@@ -98,9 +96,6 @@ public class UpDownSeekBar extends RelativeLayout implements View.OnLongClickLis
         _indicatorDetailViewParams = null;
         _indicatorDetailViewWidth = -1;
         _indicatorDetailViewHeight = -1;
-
-//        _indicatorBGView = null;
-//        _indicatorBGViewParams = null;
     }
 
     public void setMaxProgress(int maxProgress) {
@@ -181,15 +176,16 @@ public class UpDownSeekBar extends RelativeLayout implements View.OnLongClickLis
         if (_indicatorViewGroup == null) {
             _indicatorViewGroup = new RelativeLayout(getContext());
             _indicatorViewGroup.setTag(INDICATOR_VIEW_GROUP_TAG);
-            _indicatorViewGroup.setOnLongClickListener(this);
+            _indicatorViewGroup.setOnTouchListener(this);
             addView(_indicatorViewGroup);
         }
         if (_indicatorViewGroupParams == null) {
-            _indicatorViewGroupParams = new LayoutParams(_indicatorViewWidth + _indicatorDetailViewWidth, ViewGroup.LayoutParams.MATCH_PARENT);
+            _indicatorViewGroupParams = new LayoutParams(_indicatorViewWidth + _indicatorDetailViewWidth, _indicatorDetailViewHeight);
             _indicatorViewGroupParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, RelativeLayout.TRUE);
         }
         if (_indicatorDetailView == null) {
             _indicatorDetailView = new RelativeLayout(getContext());
+            _indicatorDetailView.setOnTouchListener(this);
             _indicatorDetailView.setId(R.id.indicatorDetailView);
             _indicatorViewGroup.addView(_indicatorDetailView);
         }
@@ -200,6 +196,7 @@ public class UpDownSeekBar extends RelativeLayout implements View.OnLongClickLis
         }
         if (_indicatorView == null) {
             _indicatorView = new RelativeLayout(getContext());
+            _indicatorView.setOnTouchListener(this);
             _indicatorView.setId(R.id.indicatorView);
             _indicatorViewGroup.addView(_indicatorView);
         }
@@ -209,16 +206,6 @@ public class UpDownSeekBar extends RelativeLayout implements View.OnLongClickLis
             _indicatorViewParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
             _indicatorViewParams.setMargins(0, (_indicatorDetailViewHeight / 2) - (_indicatorViewHeight / 2), 0, 0);
         }
-//        if (_indicatorBGView == null) {
-//            _indicatorBGView = new RelativeLayout(getContext());
-//            _indicatorViewGroup.addView(_indicatorBGView);
-//        }
-//        if (_indicatorBGViewParams == null) {
-//            _indicatorBGViewParams = new LayoutParams(_seekBarViewWidth, getMeasuredHeight());
-//            _indicatorBGViewParams.addRule(RelativeLayout.ALIGN_LEFT, _indicatorView.getId());
-//            _indicatorBGViewParams.addRule(RelativeLayout.BELOW, _indicatorView.getId());
-//            _indicatorBGViewParams.setMargins((_indicatorViewWidth / 2) - (_seekBarViewWidth / 2), 0, 0, 0);
-//        }
 
         int progressCalculate = (int) ((getMeasuredHeight() - _indicatorDetailViewHeight) * (float)(progress / (float)(_maxProgress - _minProgress)));
         int h = getMeasuredHeight();
@@ -235,22 +222,24 @@ public class UpDownSeekBar extends RelativeLayout implements View.OnLongClickLis
         _indicatorDetailView.setLayoutParams(_indicatorDetailViewParams);
         _indicatorView.setBackgroundColor(Color.GRAY);
         _indicatorView.setLayoutParams(_indicatorViewParams);
-//        _indicatorBGView.setBackgroundColor(Color.RED);
-//        _indicatorBGView.setLayoutParams(_indicatorBGViewParams);
 
         invalidate();
     }
 
     @Override
-    public boolean onLongClick(View v) {
-
-        // TODO: http://devbible.tistory.com/48 확인해볼 것.
-
-        ClipData.Item item = new ClipData.Item((CharSequence) v.getTag());
-        String[] mimeTypes = { ClipDescription.MIMETYPE_TEXT_PLAIN };
-        ClipData data = new ClipData(v.getTag().toString(), mimeTypes, item);
-        DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(v);
-        v.startDrag(data, shadowBuilder, v, 0);
+    public boolean onTouch(View v, MotionEvent event) {
+        if (v.getTag() == _indicatorViewGroup.getTag()) {
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_MOVE:
+                    DisplayMetrics display = getResources().getDisplayMetrics();
+                    int displayHeight = display.heightPixels;
+                    _indicatorViewGroupParams.setMargins(0, (int) ((getMeasuredHeight() - (_indicatorDetailViewHeight / 2)) * event.getRawY() / displayHeight), 0, 0);
+                    _indicatorViewGroup.setLayoutParams(_indicatorViewGroupParams);
+                    break;
+            }
+        } else {
+            return false;
+        }
         return true;
     }
 }
