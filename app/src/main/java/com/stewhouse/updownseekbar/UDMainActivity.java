@@ -3,10 +3,13 @@ package com.stewhouse.updownseekbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 public class UDMainActivity extends AppCompatActivity implements View.OnClickListener, UpDownSeekBarListener {
 
@@ -87,6 +90,7 @@ public class UDMainActivity extends AppCompatActivity implements View.OnClickLis
 
     @Override
     public void progressChanged(int progress) {
-        Log.e("PROGRESS", "progress: " + progress);
+        TextView textView = (TextView) _upDownSeekBar.getIndicatorDetailView().findViewById(R.id.textView);
+        textView.setText("" + progress);
     }
 }

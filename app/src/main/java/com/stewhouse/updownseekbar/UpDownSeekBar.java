@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AbsoluteLayout;
@@ -156,6 +157,10 @@ public class UpDownSeekBar extends RelativeLayout implements View.OnTouchListene
         return _progress;
     }
 
+    public RelativeLayout getIndicatorDetailView() {
+        return _indicatorDetailView;
+    }
+
     public void setProgress(int progress) {
         if (_seekBarView == null) {
             _seekBarView = new RelativeLayout(getContext());
@@ -198,7 +203,9 @@ public class UpDownSeekBar extends RelativeLayout implements View.OnTouchListene
             _indicatorViewGroupParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, RelativeLayout.TRUE);
         }
         if (_indicatorDetailView == null) {
-            _indicatorDetailView = new RelativeLayout(getContext());
+            LayoutInflater inflater = LayoutInflater.from(getContext());
+            RelativeLayout layout = (RelativeLayout) inflater.inflate(R.layout.detail_view, null);
+            _indicatorDetailView = (RelativeLayout) layout.findViewById(R.id.detailView);
             _indicatorDetailView.setOnTouchListener(this);
             _indicatorDetailView.setId(R.id.indicatorDetailView);
             _indicatorViewGroup.addView(_indicatorDetailView);
@@ -234,7 +241,6 @@ public class UpDownSeekBar extends RelativeLayout implements View.OnTouchListene
         _minIndicatorView.setBackgroundColor(Color.WHITE);
         _minIndicatorView.setLayoutParams(_minIndicatorViewParams);
         _indicatorViewGroup.setLayoutParams(_indicatorViewGroupParams);
-        _indicatorDetailView.setBackgroundColor(Color.BLUE);
         _indicatorDetailView.setLayoutParams(_indicatorDetailViewParams);
         _indicatorView.setBackgroundColor(Color.GRAY);
         _indicatorView.setLayoutParams(_indicatorViewParams);
