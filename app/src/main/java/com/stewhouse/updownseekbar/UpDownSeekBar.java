@@ -4,11 +4,9 @@ import android.content.Context;
 import android.graphics.Color;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.AbsoluteLayout;
 import android.widget.RelativeLayout;
 
 /**
@@ -162,6 +160,29 @@ public class UpDownSeekBar extends RelativeLayout implements View.OnTouchListene
     }
 
     public void setProgress(int progress) {
+        setViews();
+
+        int progressCalculate = (int) ((getMeasuredHeight() - _indicatorDetailViewHeight) * (float)(progress / (float)(_maxProgress - _minProgress)));
+        int h = getMeasuredHeight();
+        _indicatorViewGroupParams.setMargins(0, (getMeasuredHeight() - _indicatorDetailViewHeight) - progressCalculate, 0, 0);
+        _progress = progress;
+        _listener.progressChanged(_progress);
+
+        _seekBarView.setLayoutParams(_seekBarViewParams);
+        _seekBarView.setBackgroundColor(Color.MAGENTA);
+        _maxIndicatorView.setBackgroundColor(Color.GREEN);
+        _maxIndicatorView.setLayoutParams(_maxIndicatorViewParams);
+        _minIndicatorView.setBackgroundColor(Color.WHITE);
+        _minIndicatorView.setLayoutParams(_minIndicatorViewParams);
+        _indicatorViewGroup.setLayoutParams(_indicatorViewGroupParams);
+        _indicatorDetailView.setLayoutParams(_indicatorDetailViewParams);
+        _indicatorView.setBackgroundColor(Color.GRAY);
+        _indicatorView.setLayoutParams(_indicatorViewParams);
+
+        invalidate();
+    }
+
+    private void setViews() {
         if (_seekBarView == null) {
             _seekBarView = new RelativeLayout(getContext());
             addView(_seekBarView);
@@ -227,25 +248,6 @@ public class UpDownSeekBar extends RelativeLayout implements View.OnTouchListene
             _indicatorViewParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
             _indicatorViewParams.setMargins(0, (_indicatorDetailViewHeight / 2) - (_indicatorViewHeight / 2), 0, 0);
         }
-
-        int progressCalculate = (int) ((getMeasuredHeight() - _indicatorDetailViewHeight) * (float)(progress / (float)(_maxProgress - _minProgress)));
-        int h = getMeasuredHeight();
-        _indicatorViewGroupParams.setMargins(0, (getMeasuredHeight() - _indicatorDetailViewHeight) - progressCalculate, 0, 0);
-        _progress = progressCalculate;
-        _listener.progressChanged(_progress);
-
-        _seekBarView.setLayoutParams(_seekBarViewParams);
-        _seekBarView.setBackgroundColor(Color.MAGENTA);
-        _maxIndicatorView.setBackgroundColor(Color.GREEN);
-        _maxIndicatorView.setLayoutParams(_maxIndicatorViewParams);
-        _minIndicatorView.setBackgroundColor(Color.WHITE);
-        _minIndicatorView.setLayoutParams(_minIndicatorViewParams);
-        _indicatorViewGroup.setLayoutParams(_indicatorViewGroupParams);
-        _indicatorDetailView.setLayoutParams(_indicatorDetailViewParams);
-        _indicatorView.setBackgroundColor(Color.GRAY);
-        _indicatorView.setLayoutParams(_indicatorViewParams);
-
-        invalidate();
     }
 
     @Override
@@ -260,8 +262,7 @@ public class UpDownSeekBar extends RelativeLayout implements View.OnTouchListene
                         _indicatorViewGroupParams.setMargins(0, marginTop, 0, 0);
                         _indicatorViewGroup.setLayoutParams(_indicatorViewGroupParams);
                         float heightCalculate = (float)marginTop / (float)(getMeasuredHeight() - _indicatorDetailViewHeight);
-                        _progress = _maxProgress - (int) (heightCalculate * (_maxProgress - _minProgress));
-                        _listener.progressChanged(_progress);
+                        setProgress(_maxProgress - (int) (heightCalculate * (_maxProgress - _minProgress)));
                     }
                     break;
             }

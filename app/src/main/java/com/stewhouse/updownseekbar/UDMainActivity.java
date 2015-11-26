@@ -2,13 +2,10 @@ package com.stewhouse.updownseekbar;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 public class UDMainActivity extends AppCompatActivity implements View.OnClickListener, UpDownSeekBarListener {
@@ -51,7 +48,7 @@ public class UDMainActivity extends AppCompatActivity implements View.OnClickLis
             _upDownSeekBar.setSeekBarViewWidth(20);
             _upDownSeekBar.setMaxProgress(50000);
             _upDownSeekBar.setMinProgress(10);
-            _upDownSeekBar.setProgress((30000 + 10) / 2);
+            _upDownSeekBar.setProgress(30000);
         }
     }
 
